@@ -1,0 +1,13 @@
+k-means clustering algortihm
+============================
+General description: 
+This code is a Python implementation of k-means clustering algorithm.
+
+Input: 
+A list of points in the plane where each point is represented by a latitude/longitude pair.
+
+Output: 
+The clusters of points.
+
+Technical details:
+This code is the implementation of k-means. It starts with a random point and then chooses $k-1$ other points as the farthest from the previous ones successively. It uses these $k$ points as cluster centroids and then joins each point of the input to the cluster with the closest centroid. Next, it recomputes the new centroids by computing the means of obtained clusters and repeats the first step again by finding to which cluster each point belongs. The program repeats these two steps until the clusters converge and don't change anymore [1]. In figure below, we used the locations of Vancouver drinking fountains data (link to the Vancouver Open Data) and ran the k-means code to find out fountains clusters (the parameter k=8 was chosen).
