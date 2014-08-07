@@ -1,7 +1,7 @@
 K-Means
 =======
 
-K-Means clustering algortihm
+K-Means Clustering Algortihm
 
 ## General description
  
