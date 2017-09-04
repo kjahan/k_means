@@ -7,11 +7,14 @@ geo_locs = []
 #loc_ = Point(0.0, 0.0)  #tuples for location
 #geo_locs.append(loc_)
 #read the fountains location from the csv input file and store each fountain location as a Point(latit,longit) object
-f = open('/home/kazem/Downloads/Hackathon/drinkingFountains.csv', 'r')
+f = open('drinking_fountains.csv', 'r')
 reader = csv.reader(f, delimiter=",")
 for line in reader:
-    loc_ = Point(float(line[0]), float(line[1]))  #tuples for location
-    geo_locs.append(loc_)
+	try:
+		loc_ = Point(float(line[1]), float(line[2]))  #tuples for location
+		geo_locs.append(loc_)
+	except:
+		continue
 #print len(geo_locs)
 #for p in geo_locs:
 #    print "%f %f" % (p.latit, p.longit)
