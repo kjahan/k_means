@@ -11,6 +11,7 @@ class clustering:
     def __init__(self, geo_locs_, k_):
         self.geo_locations = geo_locs_
         self.k = k_
+	#self.draw_graph =draw_graph 
         self.clusters = []  #clusters of nodes
         self.means = []     #means of clusters
         self.debug = False  #debug flag
@@ -20,23 +21,23 @@ class clustering:
         dist = {}
         for point_1 in points:
             if self.debug:
-                print 'point_1: %f %f' % (point_1.latit, point_1.longit) 
+                print('point_1: %f %f' % (point_1.latit, point_1.longit)) 
             #compute this node distance from all other points in cluster
-            for cluster in clusters.values():
+            for cluster in list(clusters.values()):
                 point_2 = cluster[0]
                 if self.debug:
-                    print 'point_2: %f %f' % (point_2.latit, point_2.longit)
+                    print('point_2: %f %f' % (point_2.latit, point_2.longit))
                 if point_1 not in dist:
                     dist[point_1] = math.sqrt(math.pow(point_1.latit - point_2.latit,2.0) + math.pow(point_1.longit - point_2.longit,2.0))       
                 else:
                     dist[point_1] += math.sqrt(math.pow(point_1.latit - point_2.latit,2.0) + math.pow(point_1.longit - point_2.longit,2.0))
         if self.debug:
-            for key, value in dist.items():
-                print "(%f, %f) ==> %f" % (key.latit,key.longit,value)
+            for key, value in list(dist.items()):
+                print("(%f, %f) ==> %f" % (key.latit,key.longit,value))
         #now let's return the point that has the maximum distance from previous nodes
         count_ = 0
         max_ = 0
-        for key, value in dist.items():
+        for key, value in list(dist.items()):
             if count_ == 0:
                 max_ = value
                 max_point = key
@@ -51,7 +52,7 @@ class clustering:
         #pick the first node at random
         point_ = rand.choice(points)
         if self.debug:
-            print 'point#0: %f %f' % (point_.latit, point_.longit)
+            print('point#0: %f %f' % (point_.latit, point_.longit))
         clusters = dict()
         clusters.setdefault(0, []).append(point_)
         points.remove(point_)
@@ -59,7 +60,7 @@ class clustering:
         for i in range(1, self.k):
             point_ = self.next_random(i, points, clusters)
             if self.debug:
-                print 'point#%d: %f %f' % (i, point_.latit, point_.longit)
+                print('point#%d: %f %f' % (i, point_.latit, point_.longit))
             #clusters.append([point_])
             clusters.setdefault(i, []).append(point_)
             points.remove(point_)
@@ -67,11 +68,11 @@ class clustering:
         #self.print_clusters(clusters)
         self.means = self.compute_mean(clusters)
         if self.debug:
-            print "initial means:"
+            print("initial means:")
             self.print_means(self.means)
     def compute_mean(self, clusters):
         means = []
-        for cluster in clusters.values():
+        for cluster in list(clusters.values()):
             mean_point = Point(0.0, 0.0)
             cnt = 0.0
             for point in cluster:
@@ -86,18 +87,18 @@ class clustering:
     #this method assign nodes to the cluster with the smallest mean
     def assign_points(self, points):
         if self.debug:
-            print "assign points"
+            print("assign points")
         clusters = dict()
         for point in points:
             dist = []
             if self.debug:
-                print "point(%f,%f)" % (point.latit, point.longit)
+                print("point(%f,%f)" % (point.latit, point.longit))
             #find the best cluster for this node
             for mean in self.means:
                 dist.append(math.sqrt(math.pow(point.latit - mean.latit,2.0) + math.pow(point.longit - mean.longit,2.0)))
             #let's find the smallest mean
             if self.debug:
-                print dist
+                print(dist)
             cnt_ = 0
             index = 0
             min_ = dist[0]
@@ -107,7 +108,7 @@ class clustering:
                     index = cnt_
                 cnt_ += 1
             if self.debug:
-                print "index: %d" % index
+                print("index: %d" % index)
             clusters.setdefault(index, []).append(point)
         return clusters
     def update_means(self, means, threshold):
@@ -116,23 +117,23 @@ class clustering:
             mean_1 = self.means[i]
             mean_2 = means[i]
             if self.debug:
-                print "mean_1(%f,%f)" % (mean_1.latit, mean_1.longit)
-                print "mean_2(%f,%f)" % (mean_2.latit, mean_2.longit)            
+                print("mean_1(%f,%f)" % (mean_1.latit, mean_1.longit))
+                print("mean_2(%f,%f)" % (mean_2.latit, mean_2.longit))            
             if math.sqrt(math.pow(mean_1.latit - mean_2.latit,2.0) + math.pow(mean_1.longit - mean_2.longit,2.0)) > threshold:
                 return False
         return True
     #debug function: print cluster points
     def print_clusters(self, clusters):
         cluster_cnt = 1
-        for cluster in clusters.values():
-            print "nodes in cluster #%d" % cluster_cnt
+        for cluster in list(clusters.values()):
+            print("nodes in cluster #%d" % cluster_cnt)
             cluster_cnt += 1
             for point in cluster:
-                print "point(%f,%f)" % (point.latit, point.longit)
+                print("point(%f,%f)" % (point.latit, point.longit))
     #print means
     def print_means(self, means):
         for point in means:
-            print "%f %f" % (point.latit, point.longit)
+            print("%f %f" % (point.latit, point.longit))
     #k_means algorithm
     def k_means(self, plot_flag):
         if len(self.geo_locations) < self.k:
@@ -149,9 +150,9 @@ class clustering:
                 self.print_clusters(clusters)
             means = self.compute_mean(clusters)
             if self.debug:
-                print "means:"
-                print self.print_means(means)
-                print "update mean:"
+                print("means:")
+                print(self.print_means(means))
+                print("update mean:")
             stop = self.update_means(means, 0.01)
             if not stop:
                 self.means = []
@@ -164,7 +165,7 @@ class clustering:
             markers = ['o', 'd', 'x', 'h', 'H', 7, 4, 5, 6, '8', 'p', ',', '+', '.', 's', '*', 3, 0, 1, 2]
             colors = ['r', 'k', 'b', [0,0,0], [0,0,1], [0,1,0], [0,1,1], [1,0,0], [1,0,1], [1,1,0], [1,1,1]]
             cnt = 0
-            for cluster in clusters.values():
+            for cluster in list(clusters.values()):
                 latits = []
                 longits = []
                 for point in cluster:
