@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 
 from clustering import Clustering
@@ -21,6 +22,11 @@ def main(fn, clusters_no):
         cluster.print_clusters(cluster.clusters)
 
 if __name__ == "__main__":
-    fn = "data/NYC_Free_Public_WiFi_03292017.csv"
-    clusters_no = 8
-    main(fn, clusters_no)
+    parser = argparse.ArgumentParser(description="Run k-means for location data",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--input', type=str, default='NYC_Free_Public_WiFi_03292017.csv',
+                        dest='inputfile', help='input location file name')
+    parser.add_argument('--clusters', type=int, default=8, dest='clusters', help='number of clusters')
+    args = parser.parse_args()
+    fn = "data/" + args.inputfile
+    main(fn, args.clusters)
