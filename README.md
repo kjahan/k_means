@@ -15,7 +15,7 @@ The clusters of points.
 
 ## How to run:
 
-python run.py --input YOUR_LOC_FILE --clusters CLUSTERS_NO
+`python run.py --input YOUR_LOC_FILE --clusters CLUSTERS_NO`
 
 Note that the runner expects the location file be in data folder.
 
