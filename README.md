@@ -1,19 +1,23 @@
 K-Means
 =======
 
-K-Means Clustering Algortihm
-
 ## General description
  
-This code is a Python implementation of k-means clustering algorithm.
+This project is a Python implementation of k-means clustering algorithm.
 
 ## Input
 
-A list of points in the plane where each point is represented by a latitude/longitude pair.
+A list of points in two-dimensional space where each point is represented by a latitude/longitude pair.
 
 ## Output
 
 The clusters of points.
+
+## How to run:
+
+python run.py --input YOUR_LOC_FILE --clusters CLUSTERS_NO
+
+Note that the runner expects the location file be in data folder.
 
 ## Technical details
 
