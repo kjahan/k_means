@@ -2,10 +2,11 @@ import random as rand
 import math as math
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 from point import Point
 
-class Clustering:
+class KMeans:
     def __init__(self, geo_locs_, k_):
         self.geo_locations = geo_locs_
         self.k = k_
@@ -13,9 +14,9 @@ class Clustering:
         self.means = []     #means of clusters
         self.debug = False  #debug flag
 
-    #this method returns the next random node
     def next_random(self, index, points, clusters):
-        #pick next node that has the maximum distance from other nodes
+        # this method returns the next random node
+        # pick next node that has the maximum distance from other nodes
         dist = {}
         for point_1 in points:
             if self.debug:
@@ -46,9 +47,9 @@ class Clustering:
                     max_point = key
         return max_point
 
-    #this method computes the initial means
     def initial_means(self, points):
-        #pick the first node at random
+        # compute the initial means
+        # pick the first node at random
         point_ = rand.choice(points)
         if self.debug:
             print("point#0: {} {}".format(point_.latit, point_.longit))
@@ -63,8 +64,7 @@ class Clustering:
             #clusters.append([point_])
             clusters.setdefault(i, []).append(point_)
             points.remove(point_)
-        #compute mean of clusters
-        #self.print_clusters(clusters)
+        # compute mean of clusters
         self.means = self.compute_mean(clusters)
         if self.debug:
             print("initial means:")
@@ -85,8 +85,8 @@ class Clustering:
             means.append(mean_point)
         return means
 
-    #this method assign nodes to the cluster with the smallest mean
     def assign_points(self, points):
+        # assign nodes to the cluster with the smallest mean
         if self.debug:
             print("assign points")
         clusters = dict()
@@ -114,7 +114,7 @@ class Clustering:
         return clusters
 
     def update_means(self, means, threshold):
-        #check the current mean with the previous one to see if we should stop
+        # compare current means with the previous ones to see if we have to stop
         for i in range(len(self.means)):
             mean_1 = self.means[i]
             mean_2 = means[i]
@@ -125,30 +125,45 @@ class Clustering:
                 return False
         return True
 
-    #debug function: print cluster points
-    def print_clusters(self, clusters):
-        cluster_cnt = 1
+    def save(self, filename="output.csv"):
+        # save clusters into a csv file
+        with open(filename, mode='w') as csv_file:
+            writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow(['latitude', 'longitude', 'cluster_id'])
+            cluster_id = 0
+            for cluster in self.clusters.values():
+                for point in cluster:
+                    writer.writerow([point.latit, point.longit, cluster_id])
+                cluster_id += 1
+
+    def print_clusters(self, clusters=None):
+        if not clusters:
+            clusters = self.clusters
+        # debug function: print cluster points
+        cluster_id = 0
         for cluster in clusters.values():
-            print("nodes in cluster #{}".format(cluster_cnt))
-            cluster_cnt += 1
+            print("nodes in cluster #{}".format(cluster_id))
+            cluster_id += 1
             for point in cluster:
                 print("point({},{})".format(point.latit, point.longit))
 
-    #print means
     def print_means(self, means):
+        # print means
         for point in means:
             print("{} {}".format(point.latit, point.longit))
 
-    #k_means algorithm
-    def k_means(self, plot_flag):
+    def fit(self, plot_flag):
+        # Run k_means algorithm
         if len(self.geo_locations) < self.k:
             return -1   #error
         points_ = [point for point in self.geo_locations]
         #compute the initial means
         self.initial_means(points_)
         stop = False
+        iterations = 1
+        print("Starting K-Means...")
         while not stop:
-            #assignment step: assign each node to the cluster with the closest mean
+            # assignment step: assign each node to the cluster with the closest mean
             points_ = [point for point in self.geo_locations]
             clusters = self.assign_points(points_)
             if self.debug:
@@ -162,6 +177,8 @@ class Clustering:
             if not stop:
                 self.means = []
                 self.means = means
+            iterations += 1
+        print("K-Means is completed in {} iterations. Check outputs.csv for clustering results!".format(iterations))
         self.clusters = clusters
         #plot cluster for evluation
         if plot_flag:
