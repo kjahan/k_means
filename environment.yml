@@ -2,6 +2,7 @@ name: kmeans
 channels:
   - defaults
 dependencies:
+  - attrs=19.3.0
   - blas=1.0
   - ca-certificates=2020.1.1
   - certifi=2020.4.5.1
@@ -21,13 +22,18 @@ dependencies:
   - mkl-service=2.3.0
   - mkl_fft=1.0.15
   - mkl_random=1.1.0
+  - more-itertools=8.2.0
   - ncurses=6.2
   - numpy=1.18.1
   - numpy-base=1.18.1
   - openssl=1.1.1g
+  - packaging=20.3
   - pandas=1.0.3
   - pip=20.0.2
+  - pluggy=0.13.1
+  - py=1.8.1
   - pyparsing=2.4.6
+  - pytest=5.4.1
   - python=3.8.0
   - python-dateutil=2.8.1
   - pytz=2019.3
@@ -37,6 +43,7 @@ dependencies:
   - sqlite=3.31.1
   - tk=8.6.8
   - tornado=6.0.4
+  - wcwidth=0.1.9
   - wheel=0.34.2
   - xz=5.2.5
   - zlib=1.2.11
