@@ -28,9 +28,13 @@ The clusters of points.  By default we stores the computed clusters into a csv f
 
 ## How to run:
 
-`python run.py --input YOUR_LOC_FILE --clusters CLUSTERS_NO`
+`python -m src.run --input YOUR_LOC_FILE --clusters CLUSTERS_NO`
 
 Note that the runner expects the location file be in `data` folder.
+
+## Run tests
+
+`python -m pytest tests/`
 
 ## Technical details
 

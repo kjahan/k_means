@@ -2,8 +2,8 @@ import os
 import argparse
 import pandas as pd
 
-from clustering import KMeans
-from point import Point
+from src.clustering import KMeans
+from src.point import Point
 
 def main(dataset_fn, output_fn, clusters_no):
     geo_locs = []

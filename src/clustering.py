@@ -1,18 +1,18 @@
 import random as rand
-import math as math
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
 
-from point import Point
+from src.point import Point
 
 class KMeans:
     def __init__(self, geo_locs_, k_):
         self.geo_locations = geo_locs_
         self.k = k_
-        self.clusters = []  #clusters of nodes
-        self.means = []     #means of clusters
-        self.debug = False  #debug flag
+        self.clusters = None  # clusters of nodes
+        self.means = []     # means of clusters
+        self.debug = False  # debug flag
 
     def next_random(self, index, points, clusters):
         # this method returns the next random node
@@ -65,12 +65,12 @@ class KMeans:
             clusters.setdefault(i, []).append(point_)
             points.remove(point_)
         # compute mean of clusters
-        self.means = self.compute_mean(clusters)
+        self.means = self.compute_means(clusters)
         if self.debug:
             print("initial means:")
             self.print_means(self.means)
 
-    def compute_mean(self, clusters):
+    def compute_means(self, clusters):
         means = []
         for cluster in clusters.values():
             mean_point = Point(0.0, 0.0)
@@ -168,7 +168,7 @@ class KMeans:
             clusters = self.assign_points(points_)
             if self.debug:
                 self.print_clusters(clusters)
-            means = self.compute_mean(clusters)
+            means = self.compute_means(clusters)
             if self.debug:
                 print("means:")
                 self.print_means(means)
